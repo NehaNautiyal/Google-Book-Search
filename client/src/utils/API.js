@@ -1,5 +1,9 @@
 import axios from "axios";
 
+const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=" + title + "+inauthor:" + author + "&key=";
+const APIKEY = require("../../../.env");
+
+
 export default {
   // Gets all books
   getBooks: function() {
