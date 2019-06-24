@@ -2,8 +2,12 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 const routes = require("./routes");
+const dotenv = require("dotenv")
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// const APIKEY = process.env.REACT_APP_GOOGLE_BOOKS_API;
+// console.log(APIKEY);
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));

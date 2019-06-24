@@ -4,10 +4,8 @@ let title = "flowers";
 let author = "keyes";
 
 const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=" + title + "+inauthor:" + author + "&key=";
-const APIKEY = process.env.REACT_APP_GOOGLE_BOOKS_API;
 
-console.log(`${APIKEY}, apikey`);
-
+console.log(process.env);
 
 export default {
   // Gets all books
