@@ -4,9 +4,15 @@ let title = "flowers";
 let author = "keyes";
 const APIKEY = process.env.REACT_APP_GOOGLE_BOOKS_API;
 
-const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=" + title + "+inauthor:" + author + "&key=" + APIKEY;;
+const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=";
+const authorURL = "+inauthor:";
+const apiURL = "&key=";
 
 export default {
+
+  search: function(title, author) {
+    return axios.get(BASEURL + title + authorURL + author + apiURL + APIKEY);
+  },
   // Gets all books
   getBooks: function() {
     return axios.get("/api/books");
