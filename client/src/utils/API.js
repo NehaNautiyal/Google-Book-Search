@@ -2,10 +2,9 @@ import axios from "axios";
 
 let title = "flowers";
 let author = "keyes";
+const APIKEY = process.env.REACT_APP_GOOGLE_BOOKS_API;
 
-const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=" + title + "+inauthor:" + author + "&key=";
-
-console.log(process.env);
+const BASEURL = "https://www.googleapis.com/books/v1/volumes?q=" + title + "+inauthor:" + author + "&key=" + APIKEY;;
 
 export default {
   // Gets all books
