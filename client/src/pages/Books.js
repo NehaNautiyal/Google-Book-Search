@@ -5,26 +5,25 @@ import API from "../utils/API";
 import { Link } from "react-router-dom";
 import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
-import { Input, TextArea, FormBtn } from "../components/Form";
+import { Input, FormBtn } from "../components/Form";
 
 class Books extends Component {
   state = {
     books: [],
-    title: "",
-    author: "",
-    synopsis: ""
+    query: ""
   };
 
   componentDidMount() {
+    console.log(this.state.books);
     this.loadBooks();
   }
 
   loadBooks = () => {
-    API.getBooks()
-      .then(res =>
-        this.setState({ books: res.data, title: "", author: "", synopsis: "" })
-      )
-      .catch(err => console.log(err));
+    if (this.state.books.length === 0) {
+      API.search("obama")
+        .then(res => this.setState({ books: res.data.items, query: ""})
+        )
+    }
   };
 
   deleteBook = id => {
@@ -42,72 +41,67 @@ class Books extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    if (this.state.title && this.state.author) {
-      API.saveBook({
-        title: this.state.title,
-        author: this.state.author,
-        synopsis: this.state.synopsis
-      })
-        .then(res => this.loadBooks())
+    console.log(this.state.query);
+    if (this.state.query) {
+      API.search(this.state.query)
+        .then(res => this.setState({ books: res.data.items, query: "" }))
         .catch(err => console.log(err));
     }
   };
+
+  saveBook = event => {
+    let savedBooks = this.state.books.filter(book => book.id === event.target.id)
+    savedBooks = savedBooks[0];
+    API.saveBook(savedBooks)
+      .then(res => this.loadBooks())
+      .catch(err => console.log(err));
+  }
 
   render() {
     return (
       <Container fluid>
         <Row>
-          <Col size="md-6">
+          <Col size="md-12">
             <Jumbotron>
-              <h1>What Books Should I Read?</h1>
+              <h1>What Books Would You Like to Search? <span role="img" aria-label="Thinking Emoji">🤔</span></h1>
             </Jumbotron>
             <form>
               <Input
-                value={this.state.title}
+                value={this.state.query}
                 onChange={this.handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <Input
-                value={this.state.author}
-                onChange={this.handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <TextArea
-                value={this.state.synopsis}
-                onChange={this.handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
+                name="query"
+                placeholder="Type what you want to search here"
               />
               <FormBtn
-                disabled={!(this.state.author && this.state.title)}
+                disabled={!(this.state.query)}
                 onClick={this.handleFormSubmit}
               >
-                Submit Book
+                Search Book
               </FormBtn>
             </form>
           </Col>
-          <Col size="md-6 sm-12">
+          <Col size="md-12 sm-12">
             <Jumbotron>
-              <h1>Books On My List</h1>
+              <h1>Book Search Results <span role="img" aria-label="Hand Pointing Down Emoji">👇</span></h1>
             </Jumbotron>
-            {this.state.books.length ? (
+            {this.state.books.length > 0 ? (
               <List>
                 {this.state.books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => this.deleteBook(book._id)} />
-                  </ListItem>
+                  <ListItem
+                    key={book._id}
+                    id={book.id}
+                    title={book.volumeInfo.title}
+                    author={book.volumeInfo.authors}
+                    description={book.volumeInfo.description}
+                    link={book.volumeInfo.infoLink}
+                    image={book.volumeInfo.imageLinks.thumbnail}
+                    saveBook={() => this.saveBook(book._id)}
+                  />
                 ))}
               </List>
             ) : (
-              <h3>No Results to Display</h3>
-            )}
+                <h3>No Results to Display</h3>
+              )}
           </Col>
         </Row>
       </Container>
