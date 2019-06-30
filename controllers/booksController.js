@@ -19,8 +19,6 @@ module.exports = {
     db.Book
       .create(req.body)
       .then(dbModel => {
-        console.log(dbModel);
-        console.log("dbModel in booksController");
         res.json(dbModel);
       })
       .catch(err => res.status(422).json(err));

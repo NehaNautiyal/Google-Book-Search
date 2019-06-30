@@ -57,12 +57,13 @@ class Books extends Component {
     let savedBookData = [];
     savedBookData.push({
       title: savedBook[0].volumeInfo.title,
-      author: savedBook[0].volumeInfo.authors,
+      author: savedBook[0].volumeInfo.authors[0],
       description: savedBook[0].volumeInfo.description,
       image: savedBook[0].volumeInfo.imageLinks.thumbnail,
       link: savedBook[0].volumeInfo.infoLink,
       saved: true
-    })
+    });
+    console.log(savedBookData[0]);
     API.saveBook(savedBookData)
       .then(res => {
         console.log(res.data);

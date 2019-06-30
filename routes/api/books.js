@@ -13,10 +13,4 @@ router
   .put(booksController.update)
   .delete(booksController.remove);
 
-// Matches with "/api/books/saved"
-router
-  .route("/saved")
-  .post(booksController.create)
-  .get(booksController.findAll)
-
 module.exports = router;
