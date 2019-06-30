@@ -11,7 +11,7 @@ export default {
     return axios.get(BASEURL + query);
   },
   // Gets all books
-  getBooks: function() {
+  getSavedBooks: function() {
     return axios.get("/api/books");
   },
   // Gets the book with the given id

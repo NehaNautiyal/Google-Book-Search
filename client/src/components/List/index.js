@@ -14,7 +14,7 @@ export function List({ children }) {
 export function ListItem(props) {
   return (
   <li><div className="list-group-item" id={props.id}>
-    <a href={props.link}>{props.title}</a> by {props.author} <button onClick={props.saveBook} id={props.id}>SAVE</button></div>
-  <div><img src={props.image} alt={props.title}/>Descripton: {props.description}</div>
+    <a href={props.link}>{props.title}</a> by {props.author} <button onClick={props.saveBook} id={props.id}>SAVE</button><button onClick={props.deleteBook} id={props.id}>DELETE</button></div>
+  <div><img className="bookImage" src={props.image} alt={props.title}/>Descripton: {props.description}</div>
   </li>);
 }
