@@ -20,14 +20,14 @@ module.exports = {
       .create(req.body)
       .then(dbModel => {
         console.log(dbModel);
-        console.log("dbModel");
+        console.log("dbModel in booksController");
         res.json(dbModel);
       })
       .catch(err => res.status(422).json(err));
   },
   update: function(req, res) {
     db.Book
-      .findOneAndUpdate({ _id: req.params.id }, req.body)
+      .findOneAndUpdate({ _id: req.id }, {saved: true}, {new: true} )
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },

@@ -10,7 +10,8 @@ import { Input, FormBtn } from "../components/Form";
 class Books extends Component {
   state = {
     books: [],
-    query: ""
+    query: "",
+    saved: []
   };
 
   componentDidMount() {
@@ -49,11 +50,25 @@ class Books extends Component {
     }
   };
 
-  saveBook = event => {
-    let savedBooks = this.state.books.filter(book => book.id === event.target.id)
-    savedBooks = savedBooks[0];
-    API.saveBook(savedBooks)
-      .then(res => this.loadBooks())
+  saveBook = id => {
+    console.log(id);
+    let savedBook = this.state.books.filter(book => book.id === id)
+    console.log(savedBook[0]);
+    let savedBookData = [];
+    savedBookData.push({
+      title: savedBook[0].volumeInfo.title,
+      author: savedBook[0].volumeInfo.authors,
+      description: savedBook[0].volumeInfo.description,
+      image: savedBook[0].volumeInfo.imageLinks.thumbnail,
+      link: savedBook[0].volumeInfo.infoLink,
+      saved: true
+    })
+    API.saveBook(savedBookData)
+      .then(res => {
+        console.log(res.data);
+        console.log(`Book saved! ${id}`);
+        // this.setState({ saved: res.data })
+    })
       .catch(err => console.log(err));
   }
 
@@ -88,14 +103,14 @@ class Books extends Component {
               <List>
                 {this.state.books.map(book => (
                   <ListItem
-                    key={book._id}
+                    key={book.id}
                     id={book.id}
                     title={book.volumeInfo.title}
                     author={book.volumeInfo.authors}
                     description={book.volumeInfo.description}
                     link={book.volumeInfo.infoLink}
                     image={book.volumeInfo.imageLinks.thumbnail}
-                    saveBook={() => this.saveBook(book._id)}
+                    saveBook={() => this.saveBook(book.id)}
                   />
                 ))}
               </List>
